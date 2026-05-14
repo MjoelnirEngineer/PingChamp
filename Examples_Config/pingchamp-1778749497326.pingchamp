@@ -1,0 +1,55 @@
+{
+  "version": "1.0",
+  "targets": [
+    {
+      "id": "target-2",
+      "host": "1.1.1.1",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-1",
+      "host": "google.de",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-4",
+      "host": "mercedes.com",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-3",
+      "host": "opel.de",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-5",
+      "host": "outlook.com",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-6",
+      "host": "zdf.de",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    },
+    {
+      "id": "target-7",
+      "host": "1.1.1.1",
+      "intervalMs": 1000,
+      "maxTimeMs": 60000,
+      "isActive": true
+    }
+  ],
+  "createdAt": "2026-05-14T10:18:24.807Z"
+}

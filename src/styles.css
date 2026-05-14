@@ -1,3 +1,296 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+:root {
+  --bg-page: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f9fafb;
+  --bg-section: #ffffff;
+  --bg-input: #ffffff;
+  --bg-hover: #f3f4f6;
+  --bg-stats: #f9fafb;
+  --bg-card-hover: #fafbfc;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --border-input: #d1d5db;
+  --shadow: rgba(0,0,0,0.1);
+  --shadow-hover: rgba(0,0,0,0.15);
+  --header-start: #2563eb;
+  --header-end: #1e40af;
+  --gridline: #e5e7eb;
+}
+
+[data-theme="dark"] {
+  --bg-page: #0f172a;
+  --scrollbar-track: #1e293b;
+  --scrollbar-thumb: #475569;
+  --scrollbar-thumb-hover: #64748b;
+  --bg-card: #1e293b;
+  --bg-sidebar: #1e293b;
+  --bg-section: #1e293b;
+  --bg-input: #334155;
+  --bg-hover: #334155;
+  --bg-stats: #334155;
+  --bg-card-hover: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #334155;
+  --border-strong: #475569;
+  --border-input: #475569;
+  --shadow: rgba(0,0,0,0.4);
+  --shadow-hover: rgba(0,0,0,0.5);
+  --header-start: #0f172a;
+  --header-end: #020617;
+  --gridline: #334155;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .target-card {
+  background: var(--bg-card-hover);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .target-card:hover {
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .target-card .btn-toggle.active {
+  background: #381010;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .target-card .btn-remove {
+  background: #381010;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .target-card .btn-remove:hover {
+  background: #4a1a1a;
+}
+
+[data-theme="dark"] .target-info h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .target-id {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .setting-group label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .empty-state {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .graph-card {
+  background: var(--bg-card);
+}
+
+[data-theme="dark"] .graph-card:hover {
+  box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+[data-theme="dark"] .graph-header h3,
+[data-theme="dark"] .stat .value,
+[data-theme="dark"] .y-label {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .stat .label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .graph-title {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .interval,
+[data-theme="dark"] .x-label {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .graph-stats {
+  background: var(--bg-stats);
+}
+
+[data-theme="dark"] .graph-header {
+  border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .graph-legend {
+  border-top-color: var(--border);
+}
+
+[data-theme="dark"] .graph-info {
+  border-top-color: var(--border);
+}
+
+[data-theme="dark"] .svg line {
+  stroke: var(--gridline) !important;
+}
+
+[data-theme="dark"] .info-text {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-text strong {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .status {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .status.active {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .graph-card .move-btn,
+[data-theme="dark"] .graph-card .max-btn,
+[data-theme="dark"] .graph-card .csv-btn,
+[data-theme="dark"] .graph-card .reset-btn {
+  background: var(--bg-card);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .graph-card .move-btn:hover {
+  background: var(--bg-hover);
+  color: #60a5fa;
+  border-color: #60a5fa;
+}
+
+[data-theme="dark"] .graph-card .csv-btn:hover {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-color: #6ee7b7;
+}
+
+[data-theme="dark"] .graph-card .max-btn:hover {
+  background: var(--bg-hover);
+  color: #60a5fa;
+  border-color: #60a5fa;
+}
+
+[data-theme="dark"] .graph-card .reset-btn:hover {
+  background: #450a0a;
+  border-color: #fca5a5;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .graph-plot {
+  border-left-color: var(--border-strong);
+}
+
+[data-theme="dark"] .graph-y-axis {
+  border-right-color: var(--border-strong);
+}
+
+[data-theme="dark"] .graph-stats .stat .value.success {
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .stat .value.warning {
+  color: #fdba74;
+}
+
+[data-theme="dark"] .stat .value.danger {
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .graph-title .interval {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .graph-legend {
+  border-top-color: var(--border);
+}
+
+[data-theme="dark"] .legend-item.success span,
+[data-theme="dark"] .legend-item.failure span {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .targets-section h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .target-card {
+  background: var(--bg-card-hover) !important;
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .setting-group label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .setting-group input {
+  background: var(--bg-input);
+  border-color: var(--border-input);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-group label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .form-group input {
+  background: var(--bg-input);
+  border-color: var(--border-input);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .add-target-section h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-add {
+  background: #059669;
+}
+
+[data-theme="dark"] .btn-add:hover {
+  background: #10b981;
+}
+
+[data-theme="dark"] .target-info h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+[data-theme="dark"] .targets-section .empty-state {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .graphs-container svg line {
+  stroke: var(--gridline) !important;
+}

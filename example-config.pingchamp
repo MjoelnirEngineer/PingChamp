@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "targets": [
+    {
+      "id": "target-1",
+      "host": "google.com",
+      "intervalMs": 5000,
+      "maxTimeMs": 300000,
+      "isActive": false
+    },
+    {
+      "id": "target-2",
+      "host": "8.8.8.8",
+      "intervalMs": 2000,
+      "maxTimeMs": 120000,
+      "isActive": false
+    },
+    {
+      "id": "target-3",
+      "host": "cloudflare.com",
+      "intervalMs": 10000,
+      "maxTimeMs": 600000,
+      "isActive": false
+    }
+  ],
+  "createdAt": "2026-05-02T10:30:00.123Z"
+}
