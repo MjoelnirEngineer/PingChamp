@@ -1,0 +1,100 @@
+<div class="target-list-container" [class.collapsed]="collapsed()">
+  <button class="collapse-btn" (click)="collapsed.set(!collapsed())" [title]="collapsed() ? 'Expand' : 'Collapse'">
+    {{ collapsed() ? '▶' : '◀' }}
+  </button>
+
+  <div class="target-list-body">
+    <div class="add-target-section">
+    <h2>{{ 'targetList.addNew' | t }}</h2>
+    <div class="add-target-form">
+      <input
+        type="text"
+        [placeholder]="'targetList.hostPlaceholder' | t"
+        [(ngModel)]="newHost"
+        (keyup.enter)="addTarget()"
+        class="input-field"
+      />
+      <div class="form-row">
+        <div class="form-group">
+          <label>{{ 'targetList.interval' | t }}</label>
+          <input
+            type="number"
+            min="100"
+            step="100"
+            [(ngModel)]="newInterval"
+            class="input-field"
+          />
+        </div>
+        <div class="form-group">
+          <label>{{ 'targetList.maxTime' | t }}</label>
+          <input
+            type="number"
+            min="10000"
+            step="10000"
+            [(ngModel)]="newMaxTime"
+            class="input-field"
+          />
+        </div>
+      </div>
+      <button class="btn btn-add" (click)="addTarget()">
+        {{ 'targetList.addTarget' | t }}
+      </button>
+    </div>
+  </div>
+
+  <div class="targets-section" *ngIf="(targets$ | async) as targets">
+    <h2>{{ 'targetList.activeTargets' | t:targets.length }}</h2>
+    <div *ngIf="targets.length === 0" class="empty-state">
+      <p>{{ 'targetList.noTargets' | t }}</p>
+    </div>
+    <div class="targets-list">
+      <div *ngFor="let target of targets" class="target-card">
+        <div class="target-header">
+          <div class="target-info">
+            <h3 [title]="'targetList.id' | t:target.id">{{ target.host }}</h3>
+          </div>
+          <button
+            class="btn btn-toggle"
+            [class.active]="target.isActive"
+            (click)="togglePinging(target)"
+          >
+            {{ target.isActive ? ('targetList.stop' | t) : ('targetList.start' | t) }}
+          </button>
+        </div>
+        <div class="target-settings">
+          <div class="setting-group">
+            <label>{{ 'targetList.settings.interval' | t }}</label>
+            <input
+              type="number"
+              min="100"
+              step="100"
+              [value]="target.intervalMs"
+              (change)="updateInterval(target.id, $any($event.target).value)"
+              class="input-field input-small"
+              [disabled]="target.isActive"
+            />
+          </div>
+          <div class="setting-group">
+            <label>{{ 'targetList.settings.maxTime' | t }}</label>
+            <input
+              type="number"
+              min="10000"
+              step="10000"
+              [value]="target.maxTimeMs"
+              (change)="updateMaxTime(target.id, $any($event.target).value)"
+              class="input-field input-small"
+            />
+          </div>
+          <button
+            class="btn btn-remove"
+            (click)="removeTarget(target.id)"
+            [title]="'targetList.remove.title' | t"
+          >
+            {{ 'targetList.remove' | t }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

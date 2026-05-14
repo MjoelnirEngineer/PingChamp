@@ -1,0 +1,24 @@
+<div class="header">
+  <div class="header-content">
+    <h1>PingChamp</h1>
+    <p class="subtitle">{{ 'header.subtitle' | t }}</p>
+  </div>
+  <div class="header-controls">
+    <button class="theme-btn" (click)="themeService.cycleMode()" [title]="'Theme: ' + themeService.mode()">
+      {{ themeService.mode() === 'light' ? '☀' : themeService.mode() === 'dark' ? '☾' : '☯' }}
+    </button>
+    <select class="lang-select" [value]="tService.lang()" (change)="onLanguageChange($event)">
+      <option value="en">EN</option>
+      <option value="de">DE</option>
+    </select>
+    <button class="btn btn-primary" (click)="onSaveConfig()" [title]="'header.saveConfig.title' | t">
+      💾 {{ 'header.saveConfig' | t }}
+    </button>
+    <button class="btn btn-secondary" (click)="onLoadConfig()" [title]="'header.loadConfig.title' | t">
+      📂 {{ 'header.loadConfig' | t }}
+    </button>
+    <button class="btn btn-danger" (click)="onClearAll()" [title]="'header.clearAll.title' | t">
+      🗑️ {{ 'header.clearAll' | t }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="graphs-container">
+  <div *ngIf="(targets$ | async)?.length === 0; else hasTargets" class="empty-graphs">
+    <div class="empty-state">
+      <p>{{ 'pingGraph.noTargets' | t }}</p>
+      <p class="hint">{{ 'pingGraph.noTargets.hint' | t }}</p>
+    </div>
+  </div>
+
+  <ng-template #hasTargets>
+    <div class="graphs-scroll">
+    <div class="graphs-grid"
+      (dragover)="onGridDragOver($event)"
+      (drop)="onGridDrop($event)"
+      (dragleave)="onDragLeave()">
+      <div *ngFor="let graph of graphsData(); let i = index"
+        class="graph-card"
+        [class.maximized]="maximizedTargetId() === graph.target.id"
+        [class.drag-over]="dragOverIndex() === i && dragSrcIndex() !== i"
+        draggable="true"
+        (dragstart)="onDragStart(i, $event)"
+        (dragend)="onDragEnd()">
+        <div class="graph-header">
+          <div class="graph-header-title">
+            <button class="move-btn" (click)="moveGraph(-1, graph.target.id)" [title]="'Move up'">▲</button>
+            <button class="move-btn" (click)="moveGraph(1, graph.target.id)" [title]="'Move down'">▼</button>
+            <h3 class="drag-handle" (mousedown)="onHandleMouseDown()">{{ graph.target.host }}</h3>
+          </div>
+          <div class="graph-header-actions">
+            <button class="max-btn" (mousedown)="$event.stopPropagation()" (click)="toggleMaximize(graph.target.id)">⛶</button>
+            <button class="csv-btn" (mousedown)="$event.stopPropagation()" (click)="exportCSV(graph.target.host)" [title]="'Export CSV'">CSV</button>
+            <button class="reset-btn" (mousedown)="$event.stopPropagation()" (click)="resetGraph(graph.target.host)" [title]="'pingGraph.resetStats' | t">↺</button>
+            <div class="status" [class.active]="graph.target.isActive" (mousedown)="$event.stopPropagation()" (click)="toggleTarget(graph.target)">
+              {{ graph.target.isActive ? ('pingGraph.pinging' | t) : ('pingGraph.stopped' | t) }}
+            </div>
+            <button class="close-btn" (mousedown)="$event.stopPropagation()" (click)="removeGraph(graph.target)">✕</button>
+          </div>
+        </div>
+
+        <div class="graph-stats">
+          <div class="stat">
+            <span class="label">{{ 'pingGraph.avg' | t }}</span>
+            <span class="value" [title]="'pingGraph.avg.title' | t">{{ getAverageTime(graph) }}ms</span>
+          </div>
+          <div class="stat">
+            <span class="label">{{ 'pingGraph.min' | t }}</span>
+            <span class="value">{{ getMinTime(graph) }}ms</span>
+          </div>
+          <div class="stat">
+            <span class="label">{{ 'pingGraph.max' | t }}</span>
+            <span class="value">{{ getStatsMaxTime(graph) }}ms</span>
+          </div>
+          <div class="stat">
+            <span class="label">{{ 'pingGraph.success' | t }}</span>
+            <span class="value" [class.success]="getSuccessRate(graph) >= 100" [class.warning]="getSuccessRate(graph) >= 30 && getSuccessRate(graph) < 100" [class.danger]="getSuccessRate(graph) < 30">{{ getSuccessRate(graph) }}%</span>
+          </div>
+        </div>
+
+        <div class="graph-content">
+          <div class="ascii-graph">
+            <div class="graph-title">
+              <span>{{ 'pingGraph.responseTime' | t }}</span>
+              <span class="interval">{{ 'pingGraph.interval' | t:graph.target.intervalMs }} | Max: {{ Math.floor(graph.target.maxTimeMs / 1000) }}s</span>
+            </div>
+
+            <div class="graph-plot">
+              <div class="graph-y-axis">
+                <div *ngFor="let tick of getYTicks(graph)" class="y-label">{{ tick }}ms</div>
+              </div>
+
+              <div class="graph-plot-area">
+                <div class="graph-line-container">
+                  <svg class="data-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <line x1="0" y1="0" x2="100" y2="0" stroke="#e5e7eb" stroke-width="0.5" />
+                    <line x1="0" y1="25" x2="100" y2="25" stroke="#e5e7eb" stroke-width="0.5" />
+                    <line x1="0" y1="50" x2="100" y2="50" stroke="#e5e7eb" stroke-width="0.5" />
+                    <line x1="0" y1="75" x2="100" y2="75" stroke="#e5e7eb" stroke-width="0.5" />
+                    <line x1="0" y1="100" x2="100" y2="100" stroke="#e5e7eb" stroke-width="0.5" />
+                    <line x1="0" y1="0" x2="0" y2="100" stroke="#d1d5db" stroke-width="1" />
+                    <line x1="100" y1="0" x2="100" y2="100" stroke="#d1d5db" stroke-width="1" />
+
+                    <line *ngFor="let fi of graph.failureIndices"
+                      [attr.x1]="getPointX(fi, graph.data.length)"
+                      y1="0"
+                      [attr.x2]="getPointX(fi, graph.data.length)"
+                      y2="100"
+                      stroke="#ef4444" stroke-width="1.5" />
+
+                    <line *ngIf="graph.resetIndex > 0"
+                      [attr.x1]="getPointX(graph.resetIndex, graph.data.length)"
+                      y1="0"
+                      [attr.x2]="getPointX(graph.resetIndex, graph.data.length)"
+                      y2="100"
+                      stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,3" />
+
+                    <path 
+                      d="M 0,100" 
+                      stroke="#22c55e" 
+                      stroke-width="1.5"
+                      fill="none"
+                      [attr.d]="getLinePath(graph, getMaxTime(graph))" 
+                    />
+
+                    <circle 
+                      *ngFor="let dataPoint of graph.data; let i = index"
+                      [attr.cx]="getPointX(i, graph.data.length)"
+                      [attr.cy]="getPointY(dataPoint, getMaxTime(graph))"
+                      r="2" 
+                      [attr.fill]="graph.backgroundColors[i]"
+                      [attr.title]="dataPoint !== null ? dataPoint + 'ms' : ('pingGraph.noResponse' | t)"
+                    />
+                  </svg>
+                </div>
+
+                <div class="graph-x-axis">
+                  <span class="x-label">{{ graph.labels[0] || '' }}</span>
+                  <span class="x-label">{{ graph.labels[Math.ceil(graph.labels.length / 2) - 1] || '' }}</span>
+                  <span class="x-label">{{ graph.labels[graph.labels.length - 1] || '' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="graph-legend">
+              <div class="legend-item success">
+                <span class="legend-color"></span>
+                <span>{{ 'pingGraph.legend.success' | t:getSuccessCount(graph) }}</span>
+              </div>
+              <div class="legend-item failure">
+                <span class="legend-color"></span>
+                <span>{{ 'pingGraph.legend.noResponse' | t:getFailureCount(graph) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </ng-template>
+</div>
